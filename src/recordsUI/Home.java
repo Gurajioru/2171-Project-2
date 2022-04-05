@@ -45,6 +45,11 @@ public class Home extends JFrame {
 	private DefaultTableModel model;
 	private JTextField psraDateField;
 	private Home vis;
+	private JTextField textField;
+	private JTextField textField_1;
+	private JTextField textField_2;
+	private JTextField textField_3;
+	private JTextField textField_4;
 
 	/**
 	 * Launch the application.
@@ -305,6 +310,55 @@ public class Home extends JFrame {
 		table.setModel(model);
 		scrollPane.setViewportView(table);
 		
+		JButton deleteButton = new JButton("Delete");
+		
+		deleteButton.setBounds(224, 144, 89, 23);
+		home_panel.add(deleteButton);
+		
+		textField = new JTextField();
+		textField.setBounds(10, 182, 67, 20);
+		home_panel.add(textField);
+		textField.setColumns(10);
+		
+		textField_1 = new JTextField();
+		textField_1.setBounds(100, 182, 67, 20);
+		home_panel.add(textField_1);
+		textField_1.setColumns(10);
+		
+		textField_2 = new JTextField();
+		textField_2.setBounds(191, 182, 67, 20);
+		home_panel.add(textField_2);
+		textField_2.setColumns(10);
+		
+		textField_3 = new JTextField();
+		textField_3.setBounds(283, 182, 67, 20);
+		home_panel.add(textField_3);
+		textField_3.setColumns(10);
+		
+		JButton btnNewButton = new JButton("Update");
+		btnNewButton.setBounds(455, 181, 89, 23);
+		home_panel.add(btnNewButton);
+		
+		textField_4 = new JTextField();
+		textField_4.setBounds(360, 182, 67, 20);
+		home_panel.add(textField_4);
+		textField_4.setColumns(10);
+		
+		JButton btnNewButton_1 = new JButton("Export");
+		btnNewButton_1.setBounds(100, 232, 89, 23);
+		home_panel.add(btnNewButton_1);
+		
+		JButton randomizerButton = new JButton("Generate Audit");
+		randomizerButton.addActionListener(new ActionListener() {//random records
+			public void actionPerformed(ActionEvent e) {
+				model.setRowCount(0);
+				RecordsController recorder = new RecordsController();
+				loadPart(recorder.generateRandom());
+			}
+		});
+		randomizerButton.setBounds(338, 232, 120, 23);
+		home_panel.add(randomizerButton);
+		
 		homeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				tabbedPane.setSelectedIndex(0);
@@ -365,6 +419,17 @@ public class Home extends JFrame {
 					
 			}
 		}});
+		
+		deleteButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int row = table.getSelectedRow();
+				String cell = table.getModel().getValueAt(row,0).toString();
+				RecordsController recorder = new RecordsController();
+				recorder.deleteRecord(cell);
+				model.setRowCount(0);
+				loadTables();
+			}
+		});
 		vis=this;
 		loadTables();
 		vis.setVisible(true);
@@ -400,6 +465,13 @@ public class Home extends JFrame {
 			
 		}catch (ClassNotFoundException | SQLException ix) {
 			ix.printStackTrace();
+		}
+	}
+	
+	private void loadPart(String[][] rs) {
+		for (int i=0; i<rs.length; i++) {
+			//System.out.println(rs[0][1]);
+			model.addRow(rs[i]);
 		}
 	}
 }

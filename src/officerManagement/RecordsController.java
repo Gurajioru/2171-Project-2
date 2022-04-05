@@ -20,11 +20,15 @@ public class RecordsController {
 	public RecordsController(String TRN) {
 		this.TRN=TRN;
 	}
+	public RecordsController() {
+		
+	}
 	
 	public boolean checkTRN(){
 		String sqlName="root";
 		String sqlPassword="sg-epk@jtk931.048596";
 		String url = "jdbc:mysql://localhost:3306/users";
+		Connection conn=null;
 
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -33,7 +37,7 @@ public class RecordsController {
 		}
 		
 		try {
-			Connection conn = DriverManager.getConnection(url,sqlName,sqlPassword);
+			conn = DriverManager.getConnection(url,sqlName,sqlPassword);
 			PreparedStatement pre = conn.prepareStatement("select * from officers WHERE trn=?");
 			
 			pre.setString(1, getTRN());
@@ -48,6 +52,12 @@ public class RecordsController {
 			
 		}catch (SQLException iX) {
 			iX.printStackTrace();
+		}finally {
+			try {
+				conn.close();
+			}catch (SQLException iX){
+				iX.printStackTrace();
+			}
 		}
 		return false;
 	}
@@ -99,14 +109,31 @@ public class RecordsController {
 		}
 	}
 	
-	/*public void deleteRecord(String id) {
+	public void deleteRecord(String id) {
+		String q="DELETE from officers WHERE id="+id;
+		Connection conn=null;
+		PreparedStatement prep=null;
+		
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
+			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/users","root","sg-epk@jtk931.048596");
+			prep = conn.prepareStatement(q);
+			prep.execute();
+			
+			conn.close();
+			prep.close();
 			
 		}catch (SQLException | ClassNotFoundException iX) {
 			iX.printStackTrace();
+		}finally {
+			try {
+				conn.close();
+				prep.close();
+			}catch(Exception iX) {
+				
+			}
 		}
-	}*/
+	}
 	
 	public String[] viewRecord() {
 		Connection conn = null;
@@ -130,6 +157,7 @@ public class RecordsController {
 			String polExp = res.getString(6);
 			
 			String[] row = {id,fname,lname,medExp,psraExp,polExp};
+			conn.close();
 			return row;
 			
 		}catch (SQLException | ClassNotFoundException iX) {
@@ -141,7 +169,73 @@ public class RecordsController {
 	}
 	
 	
-	
+	public String[][] generateRandom() {
+		ResultSet rs=null;
+		PreparedStatement prep= null;
+		Connection conn=null;
+		String[][] arr= null;
+		
+		try {
+			String sql = "SELECT COUNT(*) from officers";
+			conn=DriverManager.getConnection("jdbc:mysql://localhost:3306/users","root","sg-epk@jtk931.048596");
+			prep=conn.prepareStatement(sql);
+			rs=prep.executeQuery();
+			rs.next();
+			int rowCount=rs.getInt(1);
+			//System.out.println(rowCount);
+			int twentyFive = (int) Math.ceil(rowCount/4.00);
+			
+			
+			//conn.close();
+			//System.out.println(twentyFive);
+			//conn=DriverManager.getConnection("jdbc:mysql://localhost:3306/users","root","sg-epk@jtk931.048596");
+			String sql2= "SELECT id,fname,lname,med_doc_exp, psra_exp, pol_doc_exp FROM officers order by RAND() LIMIT "+String.valueOf(twentyFive);
+			PreparedStatement prep2=conn.prepareStatement(sql2);
+			
+			ResultSet res2=prep2.executeQuery();
+			arr=new String[twentyFive][6];
+			for (int i =0; i<twentyFive; i++) {
+				
+				res2.next();
+				
+				String id=res2.getString(1);
+				//System.out.println(id);
+				String fname=res2.getString(2);
+				String lname=res2.getString(3);
+				String med_doc_exp=res2.getString(4);
+				String psra_doc_exp=res2.getString(5);
+				String pol_doc_exp=res2.getString(6);
+				
+				String[] row = {id, fname, lname, med_doc_exp, psra_doc_exp, pol_doc_exp};
+				//System.out.println(row.toString());
+				arr[i]=row;
+			}
+			return arr;
+			
+			//res2.close();
+			//rs.close();
+			//prep2.close();
+			//prep.close();
+			//conn.close();
+			//return res2;
+			
+			
+		}catch (SQLException iX) {
+			iX.printStackTrace();
+		}finally {
+			try {
+				conn.close();
+				prep.close();
+				rs.close();
+				
+			}catch (SQLException iX) {
+				iX.printStackTrace();
+			}
+		}
+		
+		return arr;
+		
+	}
 	
 	
 	
