@@ -237,7 +237,35 @@ public class RecordsController {
 		
 	}
 	
-	
+	public void editRecord(String id, String fname, String lname, String medExp, String psraExp, String polExp) {
+		
+		Connection conn=null;;
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			conn=DriverManager.getConnection("jdbc:mysql://localhost:3306/users","root","sg-epk@jtk931.048596");
+			String sql= "UPDATE officers SET fname=?,lname=?,med_doc_exp=?,psra_exp=?,pol_doc_exp=? WHERE id="+id;
+			PreparedStatement prep = conn.prepareStatement(sql);
+			
+			prep.setString(1, fname);
+			prep.setString(2, lname);
+			prep.setString(3, medExp);
+			prep.setString(4, psraExp);
+			prep.setString(5, polExp);
+			
+			prep.executeUpdate();
+			
+			prep.close();
+			
+		}catch (SQLException | ClassNotFoundException iX) {
+			iX.printStackTrace();
+		}finally {
+			try {
+				conn.close();
+			}catch (SQLException iX) {
+				iX.printStackTrace();
+			}
+		}
+	}
 	
 	
 	

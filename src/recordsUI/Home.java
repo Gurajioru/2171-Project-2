@@ -29,6 +29,8 @@ import officerManagement.RecordsController;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class Home extends JFrame {
 
@@ -45,11 +47,11 @@ public class Home extends JFrame {
 	private DefaultTableModel model;
 	private JTextField psraDateField;
 	private Home vis;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
-	private JTextField textField_4;
+	private JTextField fnameUpdateField;
+	private JTextField lnameUpdateField;
+	private JTextField medExpUpdateField;
+	private JTextField psraExpUpdateField;
+	private JTextField polExpUpdateField;
 
 	/**
 	 * Launch the application.
@@ -303,10 +305,31 @@ public class Home extends JFrame {
 		//home_panel.setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
+		
 		scrollPane.setBounds(0, 0, 580, 128);
 		home_panel.add(scrollPane);
 		
 		table = new JTable();
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int row = table.getSelectedRow();
+				
+				String fname= table.getModel().getValueAt(row,1).toString();
+				String lname= table.getModel().getValueAt(row,2).toString();
+				String medExp= table.getModel().getValueAt(row,3).toString();
+				String psraExp= table.getModel().getValueAt(row,4).toString();
+				String polExp= table.getModel().getValueAt(row,5).toString();
+				
+				
+				fnameUpdateField.setText(fname);
+				lnameUpdateField.setText(lname);
+				medExpUpdateField.setText(medExp);
+				psraExpUpdateField.setText(psraExp);
+				polExpUpdateField.setText(polExp);
+				
+			}
+		});
 		table.setModel(model);
 		scrollPane.setViewportView(table);
 		
@@ -315,34 +338,35 @@ public class Home extends JFrame {
 		deleteButton.setBounds(224, 144, 89, 23);
 		home_panel.add(deleteButton);
 		
-		textField = new JTextField();
-		textField.setBounds(10, 182, 67, 20);
-		home_panel.add(textField);
-		textField.setColumns(10);
+		fnameUpdateField = new JTextField();
+		fnameUpdateField.setBounds(10, 182, 80, 20);
+		home_panel.add(fnameUpdateField);
+		fnameUpdateField.setColumns(10);
 		
-		textField_1 = new JTextField();
-		textField_1.setBounds(100, 182, 67, 20);
-		home_panel.add(textField_1);
-		textField_1.setColumns(10);
+		lnameUpdateField = new JTextField();
+		lnameUpdateField.setBounds(100, 182, 67, 20);
+		home_panel.add(lnameUpdateField);
+		lnameUpdateField.setColumns(10);
 		
-		textField_2 = new JTextField();
-		textField_2.setBounds(191, 182, 67, 20);
-		home_panel.add(textField_2);
-		textField_2.setColumns(10);
+		medExpUpdateField = new JTextField();
+		medExpUpdateField.setBounds(177, 182, 81, 20);
+		home_panel.add(medExpUpdateField);
+		medExpUpdateField.setColumns(10);
 		
-		textField_3 = new JTextField();
-		textField_3.setBounds(283, 182, 67, 20);
-		home_panel.add(textField_3);
-		textField_3.setColumns(10);
+		psraExpUpdateField = new JTextField();
+		psraExpUpdateField.setBounds(277, 182, 73, 20);
+		home_panel.add(psraExpUpdateField);
+		psraExpUpdateField.setColumns(10);
 		
-		JButton btnNewButton = new JButton("Update");
-		btnNewButton.setBounds(455, 181, 89, 23);
-		home_panel.add(btnNewButton);
+		JButton updateButton = new JButton("Update");
 		
-		textField_4 = new JTextField();
-		textField_4.setBounds(360, 182, 67, 20);
-		home_panel.add(textField_4);
-		textField_4.setColumns(10);
+		updateButton.setBounds(455, 181, 89, 23);
+		home_panel.add(updateButton);
+		
+		polExpUpdateField = new JTextField();
+		polExpUpdateField.setBounds(360, 182, 73, 20);
+		home_panel.add(polExpUpdateField);
+		polExpUpdateField.setColumns(10);
 		
 		JButton btnNewButton_1 = new JButton("Export");
 		btnNewButton_1.setBounds(100, 232, 89, 23);
@@ -423,11 +447,39 @@ public class Home extends JFrame {
 		deleteButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int row = table.getSelectedRow();
+				if (row>0) {
 				String cell = table.getModel().getValueAt(row,0).toString();
 				RecordsController recorder = new RecordsController();
 				recorder.deleteRecord(cell);
 				model.setRowCount(0);
 				loadTables();
+				}
+			}
+		});
+		
+		updateButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int row=table.getSelectedRow();
+				
+				if (row>0) {
+					String id= table.getModel().getValueAt(row,0).toString();
+					
+					
+					String fname=fnameUpdateField.getText();
+					String lname= lnameUpdateField.getText();
+					String medExp=medExpUpdateField.getText();
+					String psraExp=psraExpUpdateField.getText();
+					String polExp=polExpUpdateField.getText();
+					
+					
+					
+					//if (fname.equals("") || )
+					
+					RecordsController recorder = new RecordsController();
+					recorder.editRecord(id, fname, lname, medExp, psraExp, polExp);
+					model.setRowCount(0);
+					loadTables();
+				}
 			}
 		});
 		vis=this;
