@@ -408,7 +408,6 @@ public class Home extends JFrame {
 				
 				RecordsController recorder = new RecordsController(TRN);
 				
-				
 				String fname= fnameField.getText();
 				String lname = lnameField.getText();
 				String company = companyField.getText();
@@ -421,10 +420,17 @@ public class Home extends JFrame {
 				String recDate= recDateField.getText();
 				String psraExp= psraDateField.getText();
 				
-				Records record = new Records(TRN,fname,lname,company,position,serv,avsecDate, avsecGrade, medExp, polExp, recDate, psraExp);
-				recorder.createRecord(record);
-				model.setRowCount(0);
-				loadTables();
+				if (fname.equals("") || lname.equals("") || company.equals("") || position.equals("") || serv.equals("") || avsecDate.equals("") || avsecGrade.equals("") || medExp.equals("") || polExp.equals("") || recDate.equals("") || psraExp.equals("")) {
+					JOptionPane.showMessageDialog(null,"Blank Fields Detected","User Entry Error",JOptionPane.ERROR_MESSAGE);
+
+				}else {
+					Records record = new Records(TRN,fname,lname,company,position,serv,avsecDate, avsecGrade, medExp, polExp, recDate, psraExp);
+					recorder.createRecord(record);
+					model.setRowCount(0);
+					loadTables();
+				}
+				
+				
 				
 				
 			}
