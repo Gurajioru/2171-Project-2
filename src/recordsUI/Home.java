@@ -6,6 +6,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.metal.MetalTabbedPaneUI;
 import javax.swing.JButton;
 import javax.swing.JTabbedPane;
 import javax.swing.JLabel;
@@ -52,6 +53,7 @@ public class Home extends JFrame {
 	private JTextField medExpUpdateField;
 	private JTextField psraExpUpdateField;
 	private JTextField polExpUpdateField;
+	private JTextField viewIDField;
 
 	/**
 	 * Launch the application.
@@ -383,6 +385,31 @@ public class Home extends JFrame {
 		randomizerButton.setBounds(338, 232, 120, 23);
 		home_panel.add(randomizerButton);
 		
+		JLabel lblNewLabel_16 = new JLabel("View by ID:");
+		lblNewLabel_16.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblNewLabel_16.setBounds(110, 266, 89, 14);
+		home_panel.add(lblNewLabel_16);
+		
+		JButton btnNewButton = new JButton("View");
+		
+		btnNewButton.setBounds(348, 263, 89, 23);
+		home_panel.add(btnNewButton);
+		
+		viewIDField = new JTextField();
+		viewIDField.setBounds(224, 264, 86, 20);
+		home_panel.add(viewIDField);
+		viewIDField.setColumns(10);
+		
+		JButton resetButton = new JButton("Reload ");
+		resetButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				model.setRowCount(0);
+				loadTables();
+			}
+		});
+		resetButton.setBounds(224, 232, 89, 23);
+		home_panel.add(resetButton);
+		
 		homeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				tabbedPane.setSelectedIndex(0);
@@ -404,7 +431,7 @@ public class Home extends JFrame {
 		createSubmit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String TRN= trnField.getText();
-				trnField.setText("");
+				
 				
 				RecordsController recorder = new RecordsController(TRN);
 				
@@ -428,6 +455,19 @@ public class Home extends JFrame {
 					recorder.createRecord(record);
 					model.setRowCount(0);
 					loadTables();
+					trnField.setText("");
+					fnameField.setText("");
+					lnameField.setText("");
+					companyField.setText("");
+					positionField.setText("");
+					servLengthField.setText("");
+					avsecDateField.setText("");
+					avsecGradeField.setText("");
+					medDateField.setText("");
+					polDateField.setText("");
+					recDateField.setText("");
+					psraDateField.setText("");
+					tabbedPane.setSelectedIndex(0);
 				}
 				
 				
@@ -486,6 +526,20 @@ public class Home extends JFrame {
 					model.setRowCount(0);
 					loadTables();
 				}
+			}
+		});
+		
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				String id=viewIDField.getText();
+				if (!id.equals("")) {
+					RecordsController recorder = new RecordsController(id);
+					model.setRowCount(0);
+					viewIDField.setText("");
+					loadPart(recorder.viewRecord(id));
+				}
+				
 			}
 		});
 		vis=this;

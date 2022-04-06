@@ -135,35 +135,38 @@ public class RecordsController {
 		}
 	}
 	
-	public String[] viewRecord() {
+	public String[][] viewRecord(String id) {
 		Connection conn = null;
 		PreparedStatement prep = null;
 		ResultSet res=null;
-		
+		String[][] row = null;
 		
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/users","root","sg-epk@jtk931.048596");
-			String q = "SELECT ID, fname, lname, med_doc_exp, psra_exp, pol_doc_exp from officers WHERE trn=?";
+			String q = "SELECT ID, fname, lname, med_doc_exp, psra_exp, pol_doc_exp from officers WHERE id="+id;
 			prep=conn.prepareStatement(q);
 			
 			res= prep.executeQuery();
-			
-			String id = res.getString(1);
-			String fname=res.getString(2);
-			String lname=res.getString(3);
-			String medExp=res.getString(4);
-			String psraExp=res.getString(5);
-			String polExp = res.getString(6);
-			
-			String[] row = {id,fname,lname,medExp,psraExp,polExp};
+			row = new String[1][6];
+			if (res.next()) {
+				//String id = res.getString(1);
+				String fname=res.getString(2);
+				String lname=res.getString(3);
+				String medExp=res.getString(4);
+				String psraExp=res.getString(5);
+				String polExp = res.getString(6);
+				
+				String[] rowIns = {id,fname,lname,medExp,psraExp,polExp};
+				row[0]=rowIns;
+			}
 			conn.close();
 			return row;
 			
 		}catch (SQLException | ClassNotFoundException iX) {
 			iX.printStackTrace();
 		}
-		String[] none = {};
+		String[][] none = {};
 		return none;
 		
 	}
