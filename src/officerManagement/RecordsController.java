@@ -1,10 +1,17 @@
 package officerManagement;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import javax.swing.JFileChooser;
 
 public class RecordsController {
 	private String TRN;
@@ -160,11 +167,19 @@ public class RecordsController {
 				String[] rowIns = {id,fname,lname,medExp,psraExp,polExp};
 				row[0]=rowIns;
 			}
-			conn.close();
+			//conn.close();
 			return row;
 			
 		}catch (SQLException | ClassNotFoundException iX) {
 			iX.printStackTrace();
+		}finally {
+			try {
+				prep.close();
+				res.close();
+				conn.close();
+			}catch (SQLException iX) {
+				iX.printStackTrace();
+			}
 		}
 		String[][] none = {};
 		return none;
@@ -267,6 +282,81 @@ public class RecordsController {
 			}catch (SQLException iX) {
 				iX.printStackTrace();
 			}
+		}
+	}
+	
+	public boolean exportRecords() {
+		Connection conn=null;
+		ResultSet res = null;
+		PreparedStatement prep = null;
+		
+		try {
+			String docpath=new JFileChooser().getFileSystemView().getDefaultDirectory().toString();
+			String fileName = new SimpleDateFormat("yyyyMMddHHmm'.csv'").format(new Date());
+		    //PrintWriter pw= new PrintWriter(new File("C:\\Users\\aubry\\Documents\\testExport.csv"));
+			makeDir(docpath);
+			PrintWriter pw = new PrintWriter(new File(docpath+"\\"+"officerExports"+"\\"+fileName));
+		    StringBuilder sb = new StringBuilder();
+		    conn=DriverManager.getConnection("jdbc:mysql://localhost:3306/users","root","sg-epk@jtk931.048596");
+		    String sql = "Select * from officers";
+		    prep = conn.prepareStatement(sql);
+		    res=prep.executeQuery();
+		    
+		    while(res.next()){
+		        sb.append(res.getString("TRN"));
+		        sb.append(","); 
+		        sb.append(res.getString("fname"));
+		        sb.append(",");
+		        sb.append(res.getString("lname"));
+		        sb.append(",");
+		        sb.append(res.getString("company"));
+		        sb.append(",");
+		        sb.append(res.getString("position"));
+		        sb.append(",");
+		        sb.append(res.getString("serviceLength"));
+		        sb.append(","); 
+		        sb.append(res.getString("avsec_date"));
+		        sb.append(",");
+		        sb.append(res.getString("avsec_grade"));
+		        sb.append(",");
+		        sb.append(res.getString("med_doc_exp"));
+		        sb.append(",");
+		        sb.append(res.getString("pol_doc_exp"));
+		        sb.append(",");
+		        sb.append(res.getString("rec_date"));
+		        sb.append(",");
+		        sb.append(res.getString("id"));
+		        sb.append(",");
+		        sb.append(res.getString("psra_exp"));
+		        sb.append("\r\n");
+		       }
+		    pw.write(sb.toString());
+		    pw.close();
+		    return true;
+		}catch (SQLException | FileNotFoundException iX) {
+			iX.printStackTrace();
+			return false;
+		}catch (Exception ex) {
+			ex.printStackTrace();
+			return false;
+		}finally {
+			try {
+				res.close();
+				prep.close();
+				conn.close();
+			}catch (Exception iX) {
+				iX.printStackTrace();
+				
+			}
+		}
+		
+	}
+	
+	private void makeDir(String path) {
+		File dir = new File(path+"\\"+"officerExports");
+		
+		if(!dir.exists()) {
+			dir.mkdir();
 		}
 	}
 	

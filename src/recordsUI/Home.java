@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.metal.MetalTabbedPaneUI;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JTabbedPane;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -370,9 +371,10 @@ public class Home extends JFrame {
 		home_panel.add(polExpUpdateField);
 		polExpUpdateField.setColumns(10);
 		
-		JButton btnNewButton_1 = new JButton("Export");
-		btnNewButton_1.setBounds(100, 232, 89, 23);
-		home_panel.add(btnNewButton_1);
+		JButton exportButton = new JButton("Export");
+		
+		exportButton.setBounds(100, 232, 89, 23);
+		home_panel.add(exportButton);
 		
 		JButton randomizerButton = new JButton("Generate Audit");
 		randomizerButton.addActionListener(new ActionListener() {//random records
@@ -380,6 +382,7 @@ public class Home extends JFrame {
 				model.setRowCount(0);
 				RecordsController recorder = new RecordsController();
 				loadPart(recorder.generateRandom());
+				
 			}
 		});
 		randomizerButton.setBounds(338, 232, 120, 23);
@@ -390,10 +393,10 @@ public class Home extends JFrame {
 		lblNewLabel_16.setBounds(110, 266, 89, 14);
 		home_panel.add(lblNewLabel_16);
 		
-		JButton btnNewButton = new JButton("View");
+		JButton viewButton = new JButton("View");
 		
-		btnNewButton.setBounds(348, 263, 89, 23);
-		home_panel.add(btnNewButton);
+		viewButton.setBounds(348, 263, 89, 23);
+		home_panel.add(viewButton);
 		
 		viewIDField = new JTextField();
 		viewIDField.setBounds(224, 264, 86, 20);
@@ -519,17 +522,20 @@ public class Home extends JFrame {
 					
 					
 					
-					//if (fname.equals("") || )
+					if (fname.equals("") || lname.equals("") || medExp.equals("") || psraExp.equals("") || polExp.equals("")) {
+						JOptionPane.showMessageDialog(null,"Blank Fields Detected","User Entry Error",JOptionPane.ERROR_MESSAGE);
+					}else {
 					
-					RecordsController recorder = new RecordsController();
-					recorder.editRecord(id, fname, lname, medExp, psraExp, polExp);
-					model.setRowCount(0);
-					loadTables();
+						RecordsController recorder = new RecordsController();
+						recorder.editRecord(id, fname, lname, medExp, psraExp, polExp);
+						model.setRowCount(0);
+						loadTables();
+					}
 				}
 			}
 		});
 		
-		btnNewButton.addActionListener(new ActionListener() {
+		viewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
 				String id=viewIDField.getText();
@@ -540,6 +546,21 @@ public class Home extends JFrame {
 					loadPart(recorder.viewRecord(id));
 				}
 				
+			}
+		});
+		
+		exportButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				RecordsController recorder = new RecordsController();
+				
+				if (recorder.exportRecords()){
+				JOptionPane.showMessageDialog(null,"Export Successful!","Export",JOptionPane.INFORMATION_MESSAGE);
+				}else {
+					JOptionPane.showMessageDialog(null,"File Could Not be Exported","Export Error",JOptionPane.ERROR_MESSAGE);
+				}
+				//String docpath=new JFileChooser().getFileSystemView().getDefaultDirectory().toString();
+				//System.out.println(docpath);
+
 			}
 		});
 		vis=this;
