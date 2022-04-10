@@ -360,7 +360,40 @@ public class RecordsController {
 		}
 	}
 	
-	
+	public boolean addToSchedule(String id, String date, String reason, String message) {
+		
+		String url = "jdbc:mysql://localhost:3306/users";
+		String username = "root";
+		String password= "sg-epk@jtk931.048596";
+		Connection conn= null;
+		PreparedStatement prep = null;
+		try {
+			conn = DriverManager.getConnection(url,username,password);
+			String q = "INSERT into training (id, date, reason, message) VALUES (?,?,?,?)";
+			prep = conn.prepareStatement(q);
+			
+			prep.setString(1, id);
+			prep.setString(2, date);
+			prep.setString(3, reason);
+			prep.setString(4, message);
+			
+			prep.executeUpdate();
+			
+			return true;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}finally {
+			try {
+				prep.close();
+				conn.close();
+			}catch (SQLException iX) {
+				iX.printStackTrace();
+			}
+		}
+		
+	}
 	
 	
 	

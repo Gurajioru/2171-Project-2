@@ -10,5 +10,6 @@
 	<classpathentry kind="lib" path="C:/Users/aubry/OneDrive/Documents/mysql-connector-java-8.0.28.jar"/>
 	<classpathentry kind="lib" path="C:/Users/aubry/OneDrive/Documents/Audacity/javax.mail.jar"/>
 	<classpathentry kind="lib" path="C:/Users/aubry/Downloads/javax.activation-1.2.0.jar"/>
+	<classpathentry kind="lib" path="jcalendar-1.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

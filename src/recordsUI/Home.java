@@ -34,6 +34,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.Panel;
+import com.toedter.calendar.JDateChooser;
 
 public class Home extends JFrame {
 
@@ -57,6 +59,9 @@ public class Home extends JFrame {
 	private JTextField polExpUpdateField;
 	private JTextField viewIDField;
 	private JTextField subjectField;
+	private JTextField idScheduleField;
+	private JTextField reasonScheduleField;
+	private JTextField dateScheduleField;
 
 	/**
 	 * Launch the application.
@@ -107,6 +112,11 @@ public class Home extends JFrame {
 		
 		notifyButton.setBounds(10, 194, 89, 23);
 		panel.add(notifyButton);
+		
+		JButton btnNewButton = new JButton("Schedule");
+		
+		btnNewButton.setBounds(10, 262, 89, 23);
+		panel.add(btnNewButton);
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBackground(Color.BLACK);
@@ -429,6 +439,55 @@ public class Home extends JFrame {
 		resetButton.setBounds(224, 232, 89, 23);
 		home_panel.add(resetButton);
 		
+		Panel schedule = new Panel();
+		schedule.setBackground(Color.LIGHT_GRAY);
+		tabbedPane.addTab("New tab", null, schedule, null);
+		schedule.setLayout(null);
+		
+		JLabel lblNewLabel_18 = new JLabel("ID");
+		lblNewLabel_18.setBounds(164, 14, 46, 14);
+		schedule.add(lblNewLabel_18);
+		
+		idScheduleField = new JTextField();
+		idScheduleField.setBounds(276, 11, 86, 20);
+		schedule.add(idScheduleField);
+		idScheduleField.setColumns(10);
+		
+		JLabel lblNewLabel_19 = new JLabel("Date");
+		lblNewLabel_19.setBounds(164, 55, 46, 14);
+		schedule.add(lblNewLabel_19);
+		
+		JLabel lblNewLabel_20 = new JLabel("Reason");
+		lblNewLabel_20.setBounds(164, 106, 46, 14);
+		schedule.add(lblNewLabel_20);
+		
+		reasonScheduleField = new JTextField();
+		reasonScheduleField.setBounds(276, 103, 214, 20);
+		schedule.add(reasonScheduleField);
+		reasonScheduleField.setColumns(10);
+		
+		JLabel lblNewLabel_21 = new JLabel("Message");
+		lblNewLabel_21.setBounds(164, 157, 59, 14);
+		schedule.add(lblNewLabel_21);
+		
+		JTextArea messageScheduleField = new JTextArea();
+		messageScheduleField.setBounds(276, 152, 214, 77);
+		schedule.add(messageScheduleField);
+		
+		dateScheduleField = new JTextField();
+		dateScheduleField.setBounds(276, 52, 124, 20);
+		schedule.add(dateScheduleField);
+		dateScheduleField.setColumns(10);
+		
+		JLabel lblNewLabel_22 = new JLabel("Date format: YYYY-MM-DD");
+		lblNewLabel_22.setBounds(10, 279, 200, 14);
+		schedule.add(lblNewLabel_22);
+		
+		JButton saveButton = new JButton("Save");
+		
+		saveButton.setBounds(221, 275, 89, 23);
+		schedule.add(saveButton);
+		
 		homeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				tabbedPane.setSelectedIndex(0);
@@ -599,6 +658,31 @@ public class Home extends JFrame {
 				
 			}
 		});
+		
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				tabbedPane.setSelectedIndex(4);
+			}
+		});
+		
+		saveButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				RecordsController recorder = new RecordsController();
+				String id = idScheduleField.getText();
+				String date= dateScheduleField.getText();
+				String reason = reasonScheduleField.getText();
+				String message = messageScheduleField.getText();
+				
+				if (recorder.addToSchedule(id, date, reason, message)) {
+					JOptionPane.showMessageDialog(null,"Training Saved!","Message",JOptionPane.INFORMATION_MESSAGE);
+				}else {
+					JOptionPane.showMessageDialog(null,"Couldn't Add to Schedule","Schedule Error",JOptionPane.ERROR_MESSAGE);
+				}
+				
+			}
+		});
+		
 		vis=this;
 		loadTables();
 		vis.setVisible(true);
