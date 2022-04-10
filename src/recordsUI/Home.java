@@ -26,6 +26,7 @@ import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
 
+import officerManagement.Notification;
 import officerManagement.Records;
 import officerManagement.RecordsController;
 
@@ -44,7 +45,7 @@ public class Home extends JFrame {
 	private JTextField positionField;
 	private JTextField servLengthField;
 	private JTextField avsecGradeField;
-	private JTextField textField_6;
+	private JTextField recipientField;
 	private JTable table;
 	private DefaultTableModel model;
 	private JTextField psraDateField;
@@ -55,6 +56,7 @@ public class Home extends JFrame {
 	private JTextField psraExpUpdateField;
 	private JTextField polExpUpdateField;
 	private JTextField viewIDField;
+	private JTextField subjectField;
 
 	/**
 	 * Launch the application.
@@ -261,25 +263,39 @@ public class Home extends JFrame {
 		tabbedPane.addTab("New tab", null, notifyPanel, null);
 		notifyPanel.setLayout(null);
 		
-		JLabel lblNewLabel_12 = new JLabel("Mail Addess");
+		JLabel lblNewLabel_12 = new JLabel("Recipient");
 		lblNewLabel_12.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblNewLabel_12.setBounds(128, 37, 74, 25);
 		notifyPanel.add(lblNewLabel_12);
 		
-		textField_6 = new JTextField();
-		textField_6.setBounds(234, 40, 138, 20);
-		notifyPanel.add(textField_6);
-		textField_6.setColumns(10);
+		recipientField = new JTextField();
+		recipientField.setBounds(234, 40, 138, 20);
+		notifyPanel.add(recipientField);
+		recipientField.setColumns(10);
 		
 		JLabel lblNewLabel_13 = new JLabel("Message Field");
 		lblNewLabel_13.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblNewLabel_13.setBounds(198, 88, 125, 14);
+		lblNewLabel_13.setBounds(195, 126, 125, 14);
 		notifyPanel.add(lblNewLabel_13);
 		
 		JTextArea textArea = new JTextArea();
 		textArea.setFont(new Font("Monospaced", Font.PLAIN, 11));
-		textArea.setBounds(78, 136, 352, 116);
+		textArea.setBounds(81, 151, 352, 116);
 		notifyPanel.add(textArea);
+		
+		JLabel lblNewLabel_17 = new JLabel("Subject");
+		lblNewLabel_17.setBounds(128, 85, 74, 14);
+		notifyPanel.add(lblNewLabel_17);
+		
+		subjectField = new JTextField();
+		subjectField.setBounds(234, 82, 138, 20);
+		notifyPanel.add(subjectField);
+		subjectField.setColumns(10);
+		
+		JButton sendMailButton = new JButton("Send");
+		
+		sendMailButton.setBounds(206, 278, 89, 23);
+		notifyPanel.add(sendMailButton);
 		
 		JPanel trn_panel = new JPanel();
 		trn_panel.setBackground(Color.GRAY);
@@ -561,6 +577,26 @@ public class Home extends JFrame {
 				//String docpath=new JFileChooser().getFileSystemView().getDefaultDirectory().toString();
 				//System.out.println(docpath);
 
+			}
+		});
+		
+		sendMailButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String subject=subjectField.getText();
+				String recipient=recipientField.getText();
+				String message= textArea.getText();
+				
+				if (subject.equals("") || recipient.equals("") || message.equals("") ) {
+					JOptionPane.showMessageDialog(null,"Ensure all fields are filled","Mailing Error",JOptionPane.ERROR_MESSAGE);
+				}else{
+					Notification notification = new Notification(recipient, message, subject);
+					if(notification.sendMail()) {
+						JOptionPane.showMessageDialog(null,"Message Sent Successfully!","Message",JOptionPane.INFORMATION_MESSAGE);
+					}else {
+						JOptionPane.showMessageDialog(null,"Couldn't send message","Mailing Error",JOptionPane.ERROR_MESSAGE);
+					}
+				}
+				
 			}
 		});
 		vis=this;
