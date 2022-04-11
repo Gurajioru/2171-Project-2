@@ -71,7 +71,7 @@ public class RecordsController {
 	}
 	
 	
-	public void createRecord(Records record) {
+	public boolean createRecord(Records record) {
 		
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -112,9 +112,11 @@ public class RecordsController {
 			prsmt.executeUpdate();
 			
 			conn.close();
+			return true;
 		}catch (SQLException | ClassNotFoundException iX) {
 			//iX.printStackTrace();
-			JOptionPane.showMessageDialog(null,"Incorrect Format Used.","Entry error",JOptionPane.ERROR_MESSAGE);
+			//JOptionPane.showMessageDialog(null,"Incorrect Format Used.","Entry error",JOptionPane.ERROR_MESSAGE);
+			return false;
 		}
 	}
 	

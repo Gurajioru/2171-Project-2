@@ -531,22 +531,27 @@ public class Home extends JFrame {
 
 				}else {
 					Records record = new Records(TRN,fname,lname,company,position,serv,avsecDate, avsecGrade, medExp, polExp, recDate, psraExp);
-					recorder.createRecord(record);
-					model.setRowCount(0);
-					loadTables();
-					trnField.setText("");
-					fnameField.setText("");
-					lnameField.setText("");
-					companyField.setText("");
-					positionField.setText("");
-					servLengthField.setText("");
-					avsecDateField.setText("");
-					avsecGradeField.setText("");
-					medDateField.setText("");
-					polDateField.setText("");
-					recDateField.setText("");
-					psraDateField.setText("");
-					tabbedPane.setSelectedIndex(0);
+					if (recorder.createRecord(record)) {
+						model.setRowCount(0);
+						loadTables();
+						trnField.setText("");
+						fnameField.setText("");
+						lnameField.setText("");
+						companyField.setText("");
+						positionField.setText("");
+						servLengthField.setText("");
+						avsecDateField.setText("");
+						avsecGradeField.setText("");
+						medDateField.setText("");
+						polDateField.setText("");
+						recDateField.setText("");
+						psraDateField.setText("");
+						tabbedPane.setSelectedIndex(0);
+					
+					}else {
+						JOptionPane.showMessageDialog(null,"Incorrect Format Used.","Entry error",JOptionPane.ERROR_MESSAGE);
+					}
+					
 				}
 				
 				
