@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 public class RecordsController {
 	private String TRN;
@@ -112,7 +113,8 @@ public class RecordsController {
 			
 			conn.close();
 		}catch (SQLException | ClassNotFoundException iX) {
-			iX.printStackTrace();
+			//iX.printStackTrace();
+			JOptionPane.showMessageDialog(null,"Incorrect Format Used.","Entry error",JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
@@ -171,14 +173,16 @@ public class RecordsController {
 			return row;
 			
 		}catch (SQLException | ClassNotFoundException iX) {
-			iX.printStackTrace();
+			//iX.printStackTrace();
+			JOptionPane.showMessageDialog(null,"Incorrect Format Used.","Entry error",JOptionPane.ERROR_MESSAGE);
 		}finally {
 			try {
 				prep.close();
 				res.close();
 				conn.close();
 			}catch (SQLException iX) {
-				iX.printStackTrace();
+				//iX.printStackTrace();
+				JOptionPane.showMessageDialog(null,"Incorrect Format Used.","Entry error",JOptionPane.ERROR_MESSAGE);
 			}
 		}
 		String[][] none = {};
@@ -275,12 +279,14 @@ public class RecordsController {
 			prep.close();
 			
 		}catch (SQLException | ClassNotFoundException iX) {
-			iX.printStackTrace();
+			//iX.printStackTrace();
+			JOptionPane.showMessageDialog(null,"Incorrect Format Used.","Entry error",JOptionPane.ERROR_MESSAGE);
 		}finally {
 			try {
 				conn.close();
 			}catch (SQLException iX) {
-				iX.printStackTrace();
+				//iX.printStackTrace();
+				JOptionPane.showMessageDialog(null,"Incorrect Format Used.","Entry error",JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}

@@ -525,6 +525,7 @@ public class Home extends JFrame {
 				String recDate= recDateField.getText();
 				String psraExp= psraDateField.getText();
 				
+				
 				if (fname.equals("") || lname.equals("") || company.equals("") || position.equals("") || serv.equals("") || avsecDate.equals("") || avsecGrade.equals("") || medExp.equals("") || polExp.equals("") || recDate.equals("") || psraExp.equals("")) {
 					JOptionPane.showMessageDialog(null,"Blank Fields Detected","User Entry Error",JOptionPane.ERROR_MESSAGE);
 
@@ -560,8 +561,8 @@ public class Home extends JFrame {
 				
 				RecordsController recorder = new RecordsController(TRN);
 				
-				if (recorder.checkTRN()) {
-					JOptionPane.showMessageDialog(null,"Invalid Credentials","TRN Entry error",JOptionPane.ERROR_MESSAGE);
+				if (recorder.checkTRN() || TRN.length()!=9) {
+					JOptionPane.showMessageDialog(null,"TRN Already in Database or Length does not equal nine.","TRN Entry error",JOptionPane.ERROR_MESSAGE);
 				}else {
 					tabbedPane.setSelectedIndex(1);
 					
